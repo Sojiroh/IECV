@@ -1,0 +1,18 @@
+#log4j.rootCategory=DEBUG, rollingFile
+log4j.rootCategory=DEBUG,  consola
+log4j.rootLogger=DEBUG, consola
+
+# Configuraciones de RollingFileAppender
+log4j.appender.rollingFile=org.apache.log4j.RollingFileAppender
+log4j.appender.rollingFile.File=${facele.home}/logs/log.log
+log4j.appender.rollingFile.MaxFileSize=5MB
+log4j.appender.R.MaxBackupIndex=9
+log4j.appender.rollingFile.layout=org.apache.log4j.PatternLayout
+log4j.appender.rollingFile.layout.ConversionPattern=%d %-5p - %m%n
+
+#LOG A CONSOLA
+log4j.appender.consola=org.apache.log4j.ConsoleAppender
+log4j.appender.consola.threshold=DEBUG
+log4j.appender.consola.layout=org.apache.log4j.PatternLayout
+log4j.appender.consola.layout.ConversionPattern=[%d{HH:mm:ss,SSS}] [%-5p] (%F:%L) - %m%n
+
