@@ -227,6 +227,8 @@ public class TransformerIECV {
 					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable")+";"+mapResumen.get("CANT1")+";" + (mapResumen.get("IVA_NoRecuperable"))+";\n";
 				if (mapResumen.get("Codigo_IVA_NoRecuperable2")==2L)
 					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable2")+";"+mapResumen.get("CANT2")+";" + mapResumen.get("IVA_NoRecuperable2")+";\n";
+                                if (mapResumen.get("Codigo_IVA_NoRecuperable")==1L)
+					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable")+";"+mapResumen.get("CANT1")+";" + (mapResumen.get("IVA_NoRecuperable"))+";\n";
 				}
 				if (caratula.get("Tipo_Operacion").equals("VENTA")) {
 					if (mapResumen.get("Codigo_Impuesto_Adicional")==18L)
@@ -298,6 +300,8 @@ public class TransformerIECV {
 					if (map.get("Codigo_IVA_NoRecuperable").equals("3"))
 						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
 					if (map.get("Codigo_IVA_NoRecuperable").equals("2"))
+						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
+                                        if (map.get("Codigo_IVA_NoRecuperable").equals("1"))
 						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
 					
 				}
@@ -568,6 +572,16 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 						long montorecu2 = Math.abs(getValue(rawExcel.get(16)));
 						montorecu2 = montorecu2 + docresumen.get("IVA_NoRecuperable2");
 						docresumen.put("IVA_NoRecuperable2", montorecu2);
+					}
+                                        else if (Math.abs(getValue(rawExcel.get(15)))==1){
+						docresumen.put("Codigo_IVA_NoRecuperable", 1L);
+						long cantidadnorecu2 = 1;
+						cantidadnorecu2 = cantidadnorecu2 + docresumen.get("CANT1");
+						docresumen.put("CANT1", cantidadnorecu2);
+						
+						long montorecu2 = Math.abs(getValue(rawExcel.get(16)));
+						montorecu2 = montorecu2 + docresumen.get("IVA_NoRecuperable");
+						docresumen.put("IVA_NoRecuperable", montorecu2);
 					}
 					
 				}
