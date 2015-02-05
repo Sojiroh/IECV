@@ -200,9 +200,9 @@ public class TransformerIECV {
 				_resumen += "" + ";";	// 15 Total Ley 18211
 				_resumen += "" + ";";	// 16 null
 				_resumen += "" + ";";	// 17 Numero de Operaciones con IVA ret total
-				_resumen += "" + ";";	// 18 IVA retenido total
+				_resumen += mapResumen.get("IVA_RetTotal") + ";";	// 18 IVA retenido total
 				_resumen += "" + ";";	// 19 Numero de Operaciones con IVA ret parcial
-				_resumen += "" + ";";	// 20 IVA retenido parcial
+				_resumen += mapResumen.get("IVA_RetParcial") + ";";	// 20 IVA retenido parcial
 				_resumen += "" + ";";	// 21 Total cr�dito empresas constructoras
 				_resumen += "" + ";";	// 22 Total dep�sitos envases
 				_resumen += mapResumen.get("MONTO_TOTAL") + ";";	// 23 Total de totales
@@ -535,6 +535,8 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 				docresumen.put("IVA_NoRecuperable", 0L);
 				docresumen.put("IVA_NoRecuperable2", 0L);
 				docresumen.put("IVA_Fuera_Plazo", 0L);
+                                docresumen.put("IVA_RetParcial", 0L);
+				docresumen.put("IVA_RetTotal", 0L);
 			} else
 				docresumen = resumen.get("doc" + rawExcel.get(0).getRawValue());
 			
@@ -601,6 +603,26 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 						montorecu = montorecu + docresumen.get("Monto_Impuesto_Adicional");
 						docresumen.put("Monto_Impuesto_Adicional", montorecu);
 					}
+					
+				}
+                                
+                                if (13 < rawExcel.size()){
+					
+					//IVA RETENIDO_TOTAL
+				long retenidoTotal = Math.abs(getValue(rawExcel.get(13)));
+				retenidoTotal = retenidoTotal + docresumen.get("IVA_RetTotal");
+				docresumen.put("IVA_RetTotal", retenidoTotal);	
+					
+					
+				}
+                                
+                                if (14 < rawExcel.size()){
+					
+					//IVA RETENIDO_PARCIAL
+				long retenidoParcial = Math.abs(getValue(rawExcel.get(14)));
+				retenidoParcial = retenidoParcial + docresumen.get("IVA_RetParcial");
+				docresumen.put("IVA_RetParcial", retenidoParcial);	
+					
 					
 				}
 				

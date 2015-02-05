@@ -22,7 +22,7 @@ public class start {
 	public static void main(String[] args) throws IOException {
 		new SetLocationApp();
 		
-                dirDTE = Paths.get(System.getProperty("user.home"), "Downloads","libroselectronicoscomprasjulio2013adiciembre2013li");
+                dirDTE = Paths.get(System.getProperty("user.home"), "Downloads","jc2");
                 directory = Files.newDirectoryStream(dirDTE);
                 for (Path filePath : directory) {
 		File file = new File(filePath.toString());
