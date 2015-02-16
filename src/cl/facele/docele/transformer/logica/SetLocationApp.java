@@ -35,7 +35,7 @@ public class SetLocationApp {
 		} catch (Exception e) {
 			try {
 				throw new Exception(
-						"El aplicativo no está ubicado dentro del directorio '.../DocEle/lib/'.");
+						"El aplicativo no esta ubicado dentro del directorio '.../DocEle/lib/'.");
 			} catch (Exception e1) {
 				// logger.error(e1.getMessage());
 			}

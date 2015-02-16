@@ -297,10 +297,10 @@ public class TransformerIECV {
 				
 				//iva no recuperable
 				if (caratula.get("Tipo_Operacion").equals("COMPRA")) {
-					if (map.get("Codigo_IVA_NoRecuperable").equals("3"))
-						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
 					if (map.get("Codigo_IVA_NoRecuperable").equals("2"))
 						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
+//					if (map.get("Codigo_IVA_NoRecuperable2").equals("2"))
+//						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
                                         if (map.get("Codigo_IVA_NoRecuperable").equals("1"))
 						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
 					
@@ -566,11 +566,12 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 						docresumen.put("IVA_NoRecuperable", montorecu);
 					}
 					else if (Math.abs(getValue(rawExcel.get(15)))==2){
+                                            System.out.println("chupa el pico");
 						docresumen.put("Codigo_IVA_NoRecuperable2", 2L);
 						long cantidadnorecu2 = 1;
 						cantidadnorecu2 = cantidadnorecu2 + docresumen.get("CANT2");
 						docresumen.put("CANT2", cantidadnorecu2);
-						
+						System.out.println(docresumen.get("CANT2"));
 						long montorecu2 = Math.abs(getValue(rawExcel.get(16)));
 						montorecu2 = montorecu2 + docresumen.get("IVA_NoRecuperable2");
 						docresumen.put("IVA_NoRecuperable2", montorecu2);
@@ -587,10 +588,10 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 					}
 					
 				}
-				else{
-				docresumen.put("Codigo_IVA_NoRecuperable", 7L);
-				docresumen.put("Codigo_IVA_NoRecuperable2", 7L);
-				}
+//				else{
+//				docresumen.put("Codigo_IVA_NoRecuperable", 7L);
+//				docresumen.put("Codigo_IVA_NoRecuperable2", 7L);
+//				}
 				
 				if (17 < rawExcel.size()){
 					if (Math.abs(getValue(rawExcel.get(17)))==18){

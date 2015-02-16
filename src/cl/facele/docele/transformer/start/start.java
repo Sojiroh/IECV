@@ -22,7 +22,7 @@ public class start {
 	public static void main(String[] args) throws IOException {
 		new SetLocationApp();
 		
-                dirDTE = Paths.get(System.getProperty("user.home"), "Downloads","jc2");
+                dirDTE = Paths.get(System.getProperty("user.home"), "Downloads","dtes");
                 directory = Files.newDirectoryStream(dirDTE);
                 for (Path filePath : directory) {
 		File file = new File(filePath.toString());
@@ -36,7 +36,7 @@ public class start {
 		}
 
 		try {
-			BufferedWriter estadoStart = new BufferedWriter(new FileWriter("C:\\FormatoIECV" +
+			BufferedWriter estadoStart = new BufferedWriter(new FileWriter("/Users/Sojiroh/Documents/" +
 					System.currentTimeMillis()+ ".txt"));
 			estadoStart.write(txt);
 			estadoStart.close();		
