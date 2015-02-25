@@ -166,8 +166,8 @@ public class TransformerIECV {
 				String monto_iva_comun=""+mapResumen.get("MONTO_IVA_COMUN");
 				String factor_iva=""+mapResumen.get("FACTOR_IVA");
 				String total_iva=""+mapResumen.get("TOTAL_IVA");
-				String cant_fijo=""+mapResumen.get("CANT_ACTIVO_FIJO");
-				String total_fijo=""+mapResumen.get("MONTO_ACTIVO_FIJO");
+				String cant_fijo=""+mapResumen.get("CANT_ActivoFijo");
+				String total_fijo=""+mapResumen.get("IVA_ActivoFijo");
 				if(cant_comun.equals("0"))
 					cant_comun="";
 				if(monto_iva_comun.equals("0"))
@@ -537,6 +537,8 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 				docresumen.put("IVA_Fuera_Plazo", 0L);
                                 docresumen.put("IVA_RetParcial", 0L);
 				docresumen.put("IVA_RetTotal", 0L);
+                                docresumen.put("IVA_ActivoFijo", 0L);
+				docresumen.put("CANT_ActivoFijo", 0L);
 			} else
 				docresumen = resumen.get("doc" + rawExcel.get(0).getRawValue());
 			
@@ -626,6 +628,17 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 					
 					
 				}
+                                
+                                if (22 < rawExcel.size()){
+                                    //IVA ACTIVO FIJO
+                                    long cantidadactivoFijo = 1;
+                                    cantidadactivoFijo = cantidadactivoFijo + docresumen.get("CANT_ActivoFijo");
+                                    docresumen.put("CANT_ActivoFijo", cantidadactivoFijo);
+                                                
+                                    long activoFijo = Math.abs(getValue(rawExcel.get(22)));
+                                    activoFijo = activoFijo + docresumen.get("IVA_ActivoFijo");
+                                    docresumen.put("IVA_ActivoFijo", activoFijo);
+                                }
 				
 				//MONTO_EXENTO
 				long montoExento = Math.abs(getValue(rawExcel.get(6)));
