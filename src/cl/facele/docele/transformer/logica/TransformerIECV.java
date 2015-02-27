@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.lang.Long;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
@@ -158,23 +160,26 @@ public class TransformerIECV {
 			Iterator it = resumen.entrySet().iterator();
 			Map <String, Long> mapResumen = new HashMap<String, Long>();
 			while (it.hasNext()) {
+                                String factor="";
+                                double factor_iva=0;
 				mapResumen.clear();
 				@SuppressWarnings("rawtypes")
 				Map.Entry e = (Map.Entry)it.next();				
 				mapResumen = (Map<String, Long>) e.getValue();
-				String cant_comun=""+mapResumen.get("CANT_USO_COMUN");
-				String monto_iva_comun=""+mapResumen.get("MONTO_IVA_COMUN");
-				String factor_iva=""+mapResumen.get("FACTOR_IVA");
-				String total_iva=""+mapResumen.get("TOTAL_IVA");
+				String cant_comun=""+mapResumen.get("CANT_UsoComun");
+				String monto_iva_comun=""+mapResumen.get("IVA_UsoComun");
+                                DecimalFormat df = new DecimalFormat("##.##");
+                                if(0!=mapResumen.get("IVA_UsoComun")){
+                                logger.debug("este es el factor"+((double)(mapResumen.get("Monto_UsoComun"))/(double)(mapResumen.get("IVA_UsoComun"))));
+                                factor=""+df.format(((double)(mapResumen.get("Monto_UsoComun"))/(double)(mapResumen.get("IVA_UsoComun"))));
+                                }
+                                String total_iva=""+mapResumen.get("Monto_UsoComun");
 				String cant_fijo=""+mapResumen.get("CANT_ActivoFijo");
 				String total_fijo=""+mapResumen.get("IVA_ActivoFijo");
 				if(cant_comun.equals("0"))
 					cant_comun="";
 				if(monto_iva_comun.equals("0"))
 					monto_iva_comun="";
-				if(proporcionalidad.equals("0"))
-					factor_iva="";
-				else factor_iva = proporcionalidad;
 				if (total_iva.equals("0"))
 					total_iva="";
 				if (cant_fijo.equals("0"))
@@ -195,7 +200,7 @@ public class TransformerIECV {
 				_resumen += total_fijo + ";";	// 10 TOTAL MONTO IVA ACTIVO FIJO
 				_resumen += cant_comun + ";";	// 11 Num Operaciones IVA Uso Comun
 				_resumen += monto_iva_comun + ";";	// 12 Total IVA uso com�n
-				_resumen += factor_iva + ";";	// 13 Factor de proporcionalidad del IVA
+				_resumen += factor + ";";	// 13 Factor de proporcionalidad del IVA
 				_resumen += total_iva + ";";	// 14 Total Cr�dito IVA Uso Com�n
 				_resumen += "" + ";";	// 15 Total Ley 18211
 				_resumen += "" + ";";	// 16 null
@@ -539,6 +544,9 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 				docresumen.put("IVA_RetTotal", 0L);
                                 docresumen.put("IVA_ActivoFijo", 0L);
 				docresumen.put("CANT_ActivoFijo", 0L);
+                                docresumen.put("IVA_UsoComun", 0L);
+				docresumen.put("CANT_UsoComun", 0L);
+                                docresumen.put("Monto_UsoComun", 0L);
 			} else
 				docresumen = resumen.get("doc" + rawExcel.get(0).getRawValue());
 			
@@ -628,6 +636,22 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 					
 					
 				}
+                                
+                                 if (20 < rawExcel.size()){
+                                    //IVA USO COMUN
+                                     if(Math.abs(getValue(rawExcel.get(20)))!=0){
+                                    long cantidadusoComun = 1;
+                                    cantidadusoComun = cantidadusoComun + docresumen.get("CANT_UsoComun");
+                                    docresumen.put("CANT_UsoComun", cantidadusoComun);
+                                                
+                                    long usoComun = Math.abs(getValue(rawExcel.get(20)));
+                                    usoComun = usoComun + docresumen.get("IVA_UsoComun");
+                                    docresumen.put("IVA_UsoComun", usoComun);
+                                    if(21 < rawExcel.size()){
+                                        docresumen.put("Monto_UsoComun", (long)Math.abs(getValue(rawExcel.get(21))));
+                                    }
+                                }
+                                 }
                                 
                                 if (22 < rawExcel.size()){
                                     //IVA ACTIVO FIJO
