@@ -201,7 +201,7 @@ public class TransformerIECV {
 				_resumen += cant_comun + ";";	// 11 Num Operaciones IVA Uso Comun
 				_resumen += monto_iva_comun + ";";	// 12 Total IVA uso com�n
 				_resumen += factor + ";";	// 13 Factor de proporcionalidad del IVA
-				_resumen += total_iva + ";";	// 14 Total Cr�dito IVA Uso Com�n
+				_resumen += total_iva.replace(",", ".") + ";";	// 14 Total Cr�dito IVA Uso Com�n
 				_resumen += "" + ";";	// 15 Total Ley 18211
 				_resumen += "" + ";";	// 16 null
 				_resumen += "" + ";";	// 17 Numero de Operaciones con IVA ret total
