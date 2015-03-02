@@ -648,7 +648,9 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
                                     usoComun = usoComun + docresumen.get("IVA_UsoComun");
                                     docresumen.put("IVA_UsoComun", usoComun);
                                     if(21 < rawExcel.size()){
-                                        docresumen.put("Monto_UsoComun", (long)Math.abs(getValue(rawExcel.get(21))));
+                                        long usoComun2 = Math.abs(getValue(rawExcel.get(21)));
+                                     usoComun2 = usoComun2 + docresumen.get("Monto_UsoComun");
+                                     docresumen.put("Monto_UsoComun", usoComun2);
                                     }
                                 }
                                  }
