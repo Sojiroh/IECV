@@ -228,11 +228,12 @@ public class TransformerIECV {
 				_resumen += "" + ";";	// 38 TOTAL IVA terceros
 				_resumen += "\n";	
 				if (caratula.get("Tipo_Operacion").equals("COMPRA")) {
-				if (mapResumen.get("Codigo_IVA_NoRecuperable")==3L)
-					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable")+";"+mapResumen.get("CANT1")+";" + (mapResumen.get("IVA_NoRecuperable"))+";\n";
-				if (mapResumen.get("Codigo_IVA_NoRecuperable2")==2L)
-					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable2")+";"+mapResumen.get("CANT2")+";" + mapResumen.get("IVA_NoRecuperable2")+";\n";
-                                if (mapResumen.get("Codigo_IVA_NoRecuperable")==1L)
+                                    logger.debug("este es el alma de papi: " + mapResumen.get("Codigo_IVA_NoRecuperable"));
+//				if (mapResumen.get("Codigo_IVA_NoRecuperable")==3L)
+//					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable")+";"+mapResumen.get("CANT1")+";" + (mapResumen.get("IVA_NoRecuperable"))+";\n";
+//				if (mapResumen.get("Codigo_IVA_NoRecuperable2")==2L)
+//					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable2")+";"+mapResumen.get("CANT2")+";" + mapResumen.get("IVA_NoRecuperable2")+";\n";
+                                if (mapResumen.get("Codigo_IVA_NoRecuperable")!=0)
 					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable")+";"+mapResumen.get("CANT1")+";" + (mapResumen.get("IVA_NoRecuperable"))+";\n";
 				}
 				if (caratula.get("Tipo_Operacion").equals("VENTA")) {
@@ -302,12 +303,12 @@ public class TransformerIECV {
 				
 				//iva no recuperable
 				if (caratula.get("Tipo_Operacion").equals("COMPRA")) {
-					if (map.get("Codigo_IVA_NoRecuperable").equals("2"))
+					if (!map.get("Codigo_IVA_NoRecuperable").equals("0"))
 						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
 //					if (map.get("Codigo_IVA_NoRecuperable2").equals("2"))
 //						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
-                                        if (map.get("Codigo_IVA_NoRecuperable").equals("1"))
-						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
+//                                        if (map.get("Codigo_IVA_NoRecuperable").equals("1"))
+//						_detalle += "C2;" + map.get("Codigo_IVA_NoRecuperable").replace(".0", "") + ";" + map.get("IVA_NoRecuperable").replace(".0", "") + ";\n" ;
 					
 				}
 				
@@ -565,8 +566,9 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 				
 				
 				if (15 < rawExcel.size()){
-					if (Math.abs(getValue(rawExcel.get(15)))==3){
-						docresumen.put("Codigo_IVA_NoRecuperable", 3L);
+                                            long codigo = Math.abs(getValue(rawExcel.get(15)));
+                                            if (codigo!=0L){
+						docresumen.put("Codigo_IVA_NoRecuperable", codigo);
 						long cantidadnorecu1 = 1;
 						cantidadnorecu1 = cantidadnorecu1 + docresumen.get("CANT1");
 						docresumen.put("CANT1", cantidadnorecu1);
@@ -574,28 +576,28 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 						long montorecu = Math.abs(getValue(rawExcel.get(16)));
 						montorecu = montorecu + docresumen.get("IVA_NoRecuperable");
 						docresumen.put("IVA_NoRecuperable", montorecu);
-					}
-					else if (Math.abs(getValue(rawExcel.get(15)))==2){
-                                            System.out.println("chupa el pico");
-						docresumen.put("Codigo_IVA_NoRecuperable2", 2L);
-						long cantidadnorecu2 = 1;
-						cantidadnorecu2 = cantidadnorecu2 + docresumen.get("CANT2");
-						docresumen.put("CANT2", cantidadnorecu2);
-						System.out.println(docresumen.get("CANT2"));
-						long montorecu2 = Math.abs(getValue(rawExcel.get(16)));
-						montorecu2 = montorecu2 + docresumen.get("IVA_NoRecuperable2");
-						docresumen.put("IVA_NoRecuperable2", montorecu2);
-					}
-                                        else if (Math.abs(getValue(rawExcel.get(15)))==1){
-						docresumen.put("Codigo_IVA_NoRecuperable", 1L);
-						long cantidadnorecu2 = 1;
-						cantidadnorecu2 = cantidadnorecu2 + docresumen.get("CANT1");
-						docresumen.put("CANT1", cantidadnorecu2);
-						
-						long montorecu2 = Math.abs(getValue(rawExcel.get(16)));
-						montorecu2 = montorecu2 + docresumen.get("IVA_NoRecuperable");
-						docresumen.put("IVA_NoRecuperable", montorecu2);
-					}
+                                            }
+//					else if (Math.abs(getValue(rawExcel.get(15)))==2){
+//                                            System.out.println("chupa el pico");
+//						docresumen.put("Codigo_IVA_NoRecuperable2", 2L);
+//						long cantidadnorecu2 = 1;
+//						cantidadnorecu2 = cantidadnorecu2 + docresumen.get("CANT2");
+//						docresumen.put("CANT2", cantidadnorecu2);
+//						System.out.println(docresumen.get("CANT2"));
+//						long montorecu2 = Math.abs(getValue(rawExcel.get(16)));
+//						montorecu2 = montorecu2 + docresumen.get("IVA_NoRecuperable2");
+//						docresumen.put("IVA_NoRecuperable2", montorecu2);
+//					}
+//                                        else if (Math.abs(getValue(rawExcel.get(15)))==1){
+//						docresumen.put("Codigo_IVA_NoRecuperable", 1L);
+//						long cantidadnorecu2 = 1;
+//						cantidadnorecu2 = cantidadnorecu2 + docresumen.get("CANT1");
+//						docresumen.put("CANT1", cantidadnorecu2);
+//						
+//						long montorecu2 = Math.abs(getValue(rawExcel.get(16)));
+//						montorecu2 = montorecu2 + docresumen.get("IVA_NoRecuperable");
+//						docresumen.put("IVA_NoRecuperable", montorecu2);
+//					}
 					
 				}
 //				else{
