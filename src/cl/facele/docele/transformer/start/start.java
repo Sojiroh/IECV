@@ -22,7 +22,8 @@ public class start {
 	public static void main(String[] args) throws IOException {
 		new SetLocationApp();
 		
-                dirDTE = Paths.get(System.getProperty("user.home"), "Downloads","dtes");
+                //dirDTE = Paths.get(System.getProperty("user.home"), "Downloads","libros");
+		dirDTE = Paths.get("D:\\Descargas\\libros");
                 directory = Files.newDirectoryStream(dirDTE);
                 for (Path filePath : directory) {
 		File file = new File(filePath.toString());
@@ -36,7 +37,7 @@ public class start {
 		}
 
 		try {
-			BufferedWriter estadoStart = new BufferedWriter(new FileWriter("/Users/Sojiroh/Documents/" +
+			BufferedWriter estadoStart = new BufferedWriter(new FileWriter("C:\\Users\\Shupelupe\\Documents\\" +
 					System.currentTimeMillis()+ ".txt"));
 			estadoStart.write(txt);
 			estadoStart.close();		

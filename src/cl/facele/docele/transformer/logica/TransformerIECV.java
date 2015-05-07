@@ -236,8 +236,8 @@ public class TransformerIECV {
                                 if (mapResumen.get("Codigo_IVA_NoRecuperable")!=0)
 					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable")+";"+mapResumen.get("CANT1")+";" + (mapResumen.get("IVA_NoRecuperable"))+";\n";
 				}
-				if (caratula.get("Tipo_Operacion").equals("VENTA")) {
-					if (mapResumen.get("Codigo_Impuesto_Adicional")==18L)
+				if (mapResumen.get("Codigo_Impuesto_Adicional")!=0) {
+					
 						_resumen += "B1;"+mapResumen.get("Codigo_Impuesto_Adicional")+";"+mapResumen.get("Monto_Impuesto_Adicional")+";;" +";\n";
 					
 					}
@@ -314,10 +314,11 @@ public class TransformerIECV {
 				
 				//impuestos adicionales
 				if (map.get("Codigo_Impuesto_Adicional")!=null){
-					if (map.get("Codigo_Impuesto_Adicional").equals("18.0")){
+					if (!map.get("Codigo_Impuesto_Adicional").equals("")){
+					logger.debug("La Chucara " + map.get("Codigo_Impuesto_Adicional"));
 						int posicion = map.get("Factor_Impuesto_Adicional").indexOf(".");
 						_detalle += "C1;" + map.get("Codigo_Impuesto_Adicional").replace(".0", "") + ";" + map.get("Factor_Impuesto_Adicional").substring(0, posicion+2) + ";" + map.get("Monto_Impuesto_Adicional").replace(".0", "") + ";\n" ;
-				}
+					}
 				}
 			}
 			}
@@ -606,8 +607,8 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 //				}
 				
 				if (17 < rawExcel.size()){
-					if (Math.abs(getValue(rawExcel.get(17)))==18){
-						docresumen.put("Codigo_Impuesto_Adicional", 18L);
+					
+						docresumen.put("Codigo_Impuesto_Adicional", (long)Math.abs(getValue(rawExcel.get(17))));
 						long cantidadnorecu1 = 1;
 						cantidadnorecu1 = cantidadnorecu1 + docresumen.get("CANT_Impuesto_Adicional");
 						docresumen.put("CANT_Impuesto_Adicional", cantidadnorecu1);
@@ -615,7 +616,7 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 						long montorecu = Math.abs(getValue(rawExcel.get(19)));
 						montorecu = montorecu + docresumen.get("Monto_Impuesto_Adicional");
 						docresumen.put("Monto_Impuesto_Adicional", montorecu);
-					}
+					
 					
 				}
                                 
