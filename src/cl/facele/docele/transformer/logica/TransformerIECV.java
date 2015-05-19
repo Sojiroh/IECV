@@ -314,7 +314,7 @@ public class TransformerIECV {
 				
 				//impuestos adicionales
 				if (map.get("Codigo_Impuesto_Adicional")!=null){
-					if (!map.get("Codigo_Impuesto_Adicional").equals("0.0")){
+					if (!map.get("Codigo_Impuesto_Adicional").equals("") && !map.get("Codigo_Impuesto_Adicional").equals("null") && !map.get("Codigo_Impuesto_Adicional").equals("0.0")){
 					logger.debug("La Chucara " + map.get("Codigo_Impuesto_Adicional"));
 						int posicion = map.get("Factor_Impuesto_Adicional").indexOf(".");
 						_detalle += "C1;" + map.get("Codigo_Impuesto_Adicional").replace(".0", "") + ";" + map.get("Factor_Impuesto_Adicional").substring(0, posicion+2) + ";" + map.get("Monto_Impuesto_Adicional").replace(".0", "") + ";\n" ;
