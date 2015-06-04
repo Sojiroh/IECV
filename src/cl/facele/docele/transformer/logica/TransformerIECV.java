@@ -168,12 +168,12 @@ public class TransformerIECV {
 				mapResumen = (Map<String, Long>) e.getValue();
 				String cant_comun=""+mapResumen.get("CANT_UsoComun");
 				String monto_iva_comun=""+mapResumen.get("IVA_UsoComun");
-                                DecimalFormat df = new DecimalFormat("##.##");
-                                if(0!=mapResumen.get("IVA_UsoComun")){
-                                logger.debug("este es el factor"+((double)(mapResumen.get("Monto_UsoComun"))/(double)(mapResumen.get("IVA_UsoComun"))));
-                                factor=""+df.format(((double)(mapResumen.get("Monto_UsoComun"))/(double)(mapResumen.get("IVA_UsoComun"))));
-                                }
-                                String total_iva=""+mapResumen.get("Monto_UsoComun");
+                DecimalFormat df = new DecimalFormat("##.##");
+                if(0!=mapResumen.get("IVA_UsoComun")){
+                logger.debug("este es el factor"+((double)(mapResumen.get("Monto_UsoComun"))/(double)(mapResumen.get("IVA_UsoComun"))));
+                factor=""+df.format(((double)(mapResumen.get("Monto_UsoComun"))/(double)(mapResumen.get("IVA_UsoComun"))));
+                }
+                String total_iva=""+mapResumen.get("Monto_UsoComun");
 				String cant_fijo=""+mapResumen.get("CANT_ActivoFijo");
 				String total_fijo=""+mapResumen.get("IVA_ActivoFijo");
 				if(cant_comun.equals("0"))
@@ -728,7 +728,7 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 			} else {
 				det.put("Nulo", "");
 				det.put("Fecha_Emision", getFecha(rawExcel.get(3)));
-				det.put("RUT_Contraparte", getRUT(rawExcel.get(4).toString()));
+				det.put("RUT_Contraparte", getRUT(rawExcel.get(4).toString().trim()));
 				det.put("Razon_Social_Contraparte", getRznSocial(rawExcel.get(5).toString()));
 				det.put("Monto_Exento", "" + Math.abs( getValue(rawExcel.get(6))));
 				det.put("Monto_Neto", "" + Math.abs(getValue(rawExcel.get(7))));
