@@ -246,7 +246,7 @@ public class TransformerIECV {
 			
 			//DETALLE
 			for (Map<String, String> map: detalles) {
-				if(map.get("Tipo_Documento").equals("35")|| map.get("Tipo_Documento").equals("39")){
+				if(map.get("Tipo_Documento").equals("35")|| map.get("Tipo_Documento").equals("39")|| map.get("Tipo_Documento").equals("48")){
 				}
 				else {
 				_detalle += "C" + ";";	
@@ -415,13 +415,13 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 		//IEV(SOLO RESUMEN)35,38,39,41,105,919,920,922,924
 
 		if (operacion.equals("VENTA")) {
-			if ("30,32,33,34,35,38,39,40,41,43,45,46,55,56,60,61,101,102,103,104,105,106,108,109,110,111,112,901,902,903,919,920,922,924".contains(tipoDoc))
+			if ("30,32,33,34,35,38,39,40,41,43,45,46,48,55,56,60,61,101,102,103,104,105,106,108,109,110,111,112,901,902,903,919,920,922,924".contains(tipoDoc))
 				return true;
 			else
 				return false;
 		}		
 		if (operacion.endsWith("COMPRA")) {
-			if ("30,32,33,34,40,43,45,46,55,56,60,61,108,901,914,918".contains(tipoDoc))
+			if ("30,32,33,34,40,43,45,46,48,55,56,60,61,108,901,914,918".contains(tipoDoc))
 				return true;
 			else
 				return false;
