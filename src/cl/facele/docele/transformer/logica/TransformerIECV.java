@@ -200,7 +200,7 @@ public class TransformerIECV {
 				_resumen += total_fijo + ";";	// 10 TOTAL MONTO IVA ACTIVO FIJO
 				_resumen += cant_comun + ";";	// 11 Num Operaciones IVA Uso Comun
 				_resumen += monto_iva_comun + ";";	// 12 Total IVA uso com�n
-				_resumen += factor + ";";	// 13 Factor de proporcionalidad del IVA
+				_resumen += factor.replace(",", ".") + ";";	// 13 Factor de proporcionalidad del IVA
 				_resumen += total_iva.replace(",", ".") + ";";	// 14 Total Cr�dito IVA Uso Com�n
 				_resumen += "" + ";";	// 15 Total Ley 18211
 				_resumen += "" + ";";	// 16 null

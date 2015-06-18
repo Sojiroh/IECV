@@ -23,7 +23,7 @@ public class start {
 		new SetLocationApp();
 		
                 //dirDTE = Paths.get(System.getProperty("user.home"), "Downloads","libros");
-		dirDTE = Paths.get("D:\\Descargas\\libros 2");
+		dirDTE = Paths.get("D:\\Descargas\\libros");
                 directory = Files.newDirectoryStream(dirDTE);
                 for (Path filePath : directory) {
 		File file = new File(filePath.toString());
