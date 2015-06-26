@@ -236,12 +236,19 @@ public class TransformerIECV {
 //					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable2")+";"+mapResumen.get("CANT2")+";" + mapResumen.get("IVA_NoRecuperable2")+";\n";
                                 if (mapResumen.get("Codigo_IVA_NoRecuperable")!=0)
 					_resumen += "B2;"+mapResumen.get("Codigo_IVA_NoRecuperable")+";"+mapResumen.get("CANT1")+";" + (mapResumen.get("IVA_NoRecuperable"))+";\n";
-				}
+				
+                                if (mapResumen.get("Codigo_Impuesto_Adicional")!=0) {
+                					
+            						_resumen += "B1;"+mapResumen.get("Codigo_Impuesto_Adicional")+";"+mapResumen.get("Monto_Impuesto_Adicional")+";"+ mapResumen.get("Factor_Impuesto_Adicional")+".0" +";" +";\n";
+            					
+            					}
+				}else{
 				if (mapResumen.get("Codigo_Impuesto_Adicional")!=0) {
 					
 						_resumen += "B1;"+mapResumen.get("Codigo_Impuesto_Adicional")+";"+mapResumen.get("Monto_Impuesto_Adicional")+";"+ mapResumen.get("Factor_Impuesto_Adicional")+".0" +";" +";\n";
 					
 					}
+				}
 				}
 
 			
