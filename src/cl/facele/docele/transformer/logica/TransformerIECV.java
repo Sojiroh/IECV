@@ -23,6 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TransformerIECV {
+	String factorcito = null;
 	public static Logger logger = Logger.getLogger(Object.class);
 	private List<List<XSSFCell>> listExcel;
 	private Map<String, String> caratula = new HashMap<String, String>();
@@ -238,7 +239,7 @@ public class TransformerIECV {
 				}
 				if (mapResumen.get("Codigo_Impuesto_Adicional")!=0) {
 					
-						_resumen += "B1;"+mapResumen.get("Codigo_Impuesto_Adicional")+";"+mapResumen.get("Monto_Impuesto_Adicional")+";;" +";\n";
+						_resumen += "B1;"+mapResumen.get("Codigo_Impuesto_Adicional")+";"+mapResumen.get("Monto_Impuesto_Adicional")+";"+ mapResumen.get("Factor_Impuesto_Adicional")+".0" +";" +";\n";
 					
 					}
 				}
@@ -317,7 +318,7 @@ public class TransformerIECV {
 					if (!map.get("Codigo_Impuesto_Adicional").equals("") && !map.get("Codigo_Impuesto_Adicional").equals("null") && !map.get("Codigo_Impuesto_Adicional").equals("0.0")){
 					logger.debug("La Chucara " + map.get("Codigo_Impuesto_Adicional"));
 						int posicion = map.get("Factor_Impuesto_Adicional").indexOf(".");
-						_detalle += "C1;" + map.get("Codigo_Impuesto_Adicional").replace(".0", "") + ";" + map.get("Factor_Impuesto_Adicional").substring(0, posicion+2) + ";" + map.get("Monto_Impuesto_Adicional").replace(".0", "") + ";\n" ;
+						_detalle += "C1;" + map.get("Codigo_Impuesto_Adicional").replace(".0", "") + ";" + map.get("Factor_Impuesto_Adicional").substring(0, posicion+2) + ";" + Double.parseDouble(map.get("Monto_Impuesto_Adicional").replace(".0", ""))/100 + ";\n" ;
 					}
 				}
 			}
@@ -607,7 +608,8 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 //				}
 				
 				if (17 < rawExcel.size()){
-					
+						String factor = getFracion(rawExcel.get(18));
+						docresumen.put("Factor_Impuesto_Adicional", Long.parseLong(getFracion(rawExcel.get(18)).replace(".0", "")));
 						docresumen.put("Codigo_Impuesto_Adicional", (long)Math.abs(getValue(rawExcel.get(17))));
 						long cantidadnorecu1 = 1;
 						cantidadnorecu1 = cantidadnorecu1 + docresumen.get("CANT_Impuesto_Adicional");
