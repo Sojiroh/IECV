@@ -70,8 +70,9 @@ public class TransformerIECV {
 			
 			new RUT(result);
 		}catch (Exception e) {
-			throw new Exception("ERROR validando RUT [" +
-					rut + "]: " + e.getMessage());
+//			throw new Exception("ERROR validando RUT [" +
+//					rut + "]: " + e.getMessage());
+			result="55555555-5";
 		}
 		return result;		
 	}
@@ -97,9 +98,14 @@ public class TransformerIECV {
 
 		int elementoNumber = 100;		//es caratula
 		for(List<XSSFCell> rawExcel: listExcel) {
-			if (rawExcel.get(0) == null || rawExcel.get(0).toString().toString().isEmpty())
-				continue;
-
+//			if (19 < rawExcel.size()){
+//			if (rawExcel.get(0) == null && rawExcel.get(17).toString().toString().isEmpty())
+//				continue;
+//			}
+//			else{
+				if (rawExcel.get(0) == null || rawExcel.get(0).toString().toString().isEmpty())
+					continue;
+//			}
 			logger.debug(rawExcel);
 			if(rawExcel.get(0).toString().equals("RESUMEN")) {
 				if (elementoNumber != 100)
@@ -191,7 +197,7 @@ public class TransformerIECV {
 				_resumen += "B" + ";";	//0;
 				_resumen += mapResumen.get("TIPO_DOCUMENTO") + ";";	// 1 Tipo de documento
 				_resumen += "" + ";";	// 2 null
-				_resumen += mapResumen.get("CANTIDAD") + ";";	// 3 Cantidad de documentos
+				_resumen += mapResumen.get("CANTIDAD") - mapResumen.get("CANTIDADGORDA")  + ";";	// 3 Cantidad de documentos
 				_resumen += "" + ";";	// 4 Num Operaciones Exentas
 				_resumen += mapResumen.get("MONTO_EXENTO") + ";";	// 5 Total exento
 				_resumen += mapResumen.get("MONTO_NETO") + ";";	// 6 Total neto
@@ -203,7 +209,7 @@ public class TransformerIECV {
 				_resumen += monto_iva_comun + ";";	// 12 Total IVA uso com�n
 				_resumen += factor.replace(",", ".") + ";";	// 13 Factor de proporcionalidad del IVA
 				_resumen += total_iva.replace(",", ".") + ";";	// 14 Total Cr�dito IVA Uso Com�n
-				_resumen += "" + ";";	// 15 Total Ley 18211
+				_resumen += mapResumen.get("Ley18211") + ";";	// 15 Total Ley 18211
 				_resumen += "" + ";";	// 16 null
 				_resumen += "" + ";";	// 17 Numero de Operaciones con IVA ret total
 				_resumen += mapResumen.get("IVA_RetTotal") + ";";	// 18 IVA retenido total
@@ -228,6 +234,7 @@ public class TransformerIECV {
 				_resumen += "" + ";";	// 37 TOTAL IVA propio
 				_resumen += "" + ";";	// 38 TOTAL IVA terceros
 				_resumen += "\n";	
+				logger.debug("pico pal que lee: " + mapResumen.get("Codigo_Impuesto_Adicional"));
 				if (caratula.get("Tipo_Operacion").equals("COMPRA")) {
                                     logger.debug("este es el alma de papi: " + mapResumen.get("Codigo_IVA_NoRecuperable"));
 //				if (mapResumen.get("Codigo_IVA_NoRecuperable")==3L)
@@ -257,6 +264,8 @@ public class TransformerIECV {
 				if(map.get("Tipo_Documento").equals("35")|| map.get("Tipo_Documento").equals("39")|| map.get("Tipo_Documento").equals("48")){
 				}
 				else {
+//					if(map.get("gorda").equals("si")){}
+//					else {
 				_detalle += "C" + ";";	
 				_detalle += map.get("Tipo_Documento") + ";";	// 1 Tipo de documento
 				_detalle += map.get("Folio") + ";";	// 2 Folio de documento
@@ -308,7 +317,7 @@ public class TransformerIECV {
 				_detalle += "" + ";";	// 40 IVA propio
 				_detalle += "" + ";";	// 41 IVA terceros
 				_detalle += "\n";
-				
+//					}//aqui acaba if de gorda
 				//iva no recuperable
 				if (caratula.get("Tipo_Operacion").equals("COMPRA")) {
 					if (!map.get("Codigo_IVA_NoRecuperable").equals("0"))
@@ -323,9 +332,10 @@ public class TransformerIECV {
 				//impuestos adicionales
 				if (map.get("Codigo_Impuesto_Adicional")!=null){
 					if (!map.get("Codigo_Impuesto_Adicional").equals("") && !map.get("Codigo_Impuesto_Adicional").equals("null") && !map.get("Codigo_Impuesto_Adicional").equals("0.0")){
-					logger.debug("La Chucara " + map.get("Codigo_Impuesto_Adicional"));
+//					logger.debug("La Chucara " + map.get("Codigo_Impuesto_Adicional"));
 						int posicion = map.get("Factor_Impuesto_Adicional").indexOf(".");
-						_detalle += "C1;" + map.get("Codigo_Impuesto_Adicional").replace(".0", "") + ";" + map.get("Factor_Impuesto_Adicional").substring(0, posicion+2) + ";" + Double.parseDouble(map.get("Monto_Impuesto_Adicional").replace(".0", ""))/100 + ";\n" ;
+						DecimalFormat numberFormat = new DecimalFormat("#.00");
+						_detalle += "C1;" + map.get("Codigo_Impuesto_Adicional").replace(".0", "") + ";" + round(Double.parseDouble(map.get("Factor_Impuesto_Adicional").substring(0, posicion+2))/100,2) + ";" + map.get("Monto_Impuesto_Adicional").replace(".0", "") + ";\n" ;
 					}
 				}
 			}
@@ -534,6 +544,8 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 				//procede a incorporar tipo de documento en resumen
 				docresumen.put("TIPO_DOCUMENTO", (long)getValue(rawExcel.get(0)));
 				docresumen.put("CANTIDAD", 0L);
+				docresumen.put("CANTIDADGORDA", 0L);
+				docresumen.put("Ley18211", 0L);
 				docresumen.put("CANT_NULOS", 0L);
 				docresumen.put("MONTO_EXENTO", 0L);
 				docresumen.put("MONTO_NETO", 0L);
@@ -562,9 +574,15 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 			
 			//Se procede a acumular datos de RESUMEN
 			long cantidad = 1L;
+			long cantidadgorda = 1L;
+			if (23 < rawExcel.size()){
+				if (rawExcel.get(23).toString().equals("si")){
+					cantidadgorda = cantidadgorda + docresumen.get("CANTIDADGORDA");
+					docresumen.put("CANTIDADGORDA", cantidadgorda);
+				}
+			}
 			cantidad = cantidad + docresumen.get("CANTIDAD");
 			docresumen.put("CANTIDAD", cantidad);
-			
 
 			//CANT_ANULADOS
 			if (isAnula(rawExcel.get(2))) {
@@ -615,8 +633,8 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 //				}
 				
 				if (17 < rawExcel.size()){
-						String factor = getFracion(rawExcel.get(18));
-						docresumen.put("Factor_Impuesto_Adicional", Long.parseLong(getFracion(rawExcel.get(18)).replace(".0", "")));
+					if(rawExcel.get(18)!=null){
+						docresumen.put("Factor_Impuesto_Adicional", Long.parseLong(getFracion(rawExcel.get(18)).replace(".0", "").replace(".5", "")));
 						docresumen.put("Codigo_Impuesto_Adicional", (long)Math.abs(getValue(rawExcel.get(17))));
 						long cantidadnorecu1 = 1;
 						cantidadnorecu1 = cantidadnorecu1 + docresumen.get("CANT_Impuesto_Adicional");
@@ -625,7 +643,7 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 						long montorecu = Math.abs(getValue(rawExcel.get(19)));
 						montorecu = montorecu + docresumen.get("Monto_Impuesto_Adicional");
 						docresumen.put("Monto_Impuesto_Adicional", montorecu);
-					
+					}
 					
 				}
                                 
@@ -683,6 +701,11 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 				montoExento = montoExento + docresumen.get("MONTO_EXENTO");
 				docresumen.put("MONTO_EXENTO", montoExento);
 				
+				//Ley18211
+				long Ley18211 = Math.abs(getValue(rawExcel.get(11)));
+				Ley18211 = Ley18211 + docresumen.get("Ley18211");
+				docresumen.put("Ley18211", Ley18211);
+				
 				//IVA_Fuera_Plazo
 				long montoFuera = Math.abs(getValue(rawExcel.get(10)));
 				montoFuera = montoFuera + docresumen.get("IVA_Fuera_Plazo");
@@ -733,14 +756,15 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 				det.put("Codigo_Impuesto_Adicional", "");
 				det.put("Factor_Impuesto_Adicional", "");
 				det.put("Monto_Impuesto_Adicional", "");	
+				det.put("gorda","no");
 				
 			} else {
 				det.put("Nulo", "");
 				det.put("Fecha_Emision", getFecha(rawExcel.get(3)));
 				det.put("RUT_Contraparte", getRUT(rawExcel.get(4).toString().trim()));
 				det.put("Razon_Social_Contraparte", getRznSocial(rawExcel.get(5).toString()));
-				det.put("Monto_Exento", "" + Math.abs( getValue(rawExcel.get(6))));
-				det.put("Monto_Neto", "" + Math.abs(getValue(rawExcel.get(7))));
+				det.put("Monto_Exento", "" + Math.abs(Math.abs( getValue(rawExcel.get(6)))));
+				det.put("Monto_Neto", "" +Math.abs(getValue(rawExcel.get(7))));
 				det.put("Monto_IVA", "" + Math.abs(getValue(rawExcel.get(8))));	
 				det.put("Tasa_IVA", "" + Math.abs(getValue(rawExcel.get(9))));
 				det.put("IVA_Fuera_Plazo", "" + Math.abs(getValue(rawExcel.get(10))));
@@ -774,6 +798,8 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 					det.put("IVA_Proporcional", "" + Math.abs(getValue(rawExcel.get(21))));
 				if (22 < rawExcel.size())
 					det.put("IVA_Activo_Fijo", "" + Math.abs(getValue(rawExcel.get(22))));
+				if (23 < rawExcel.size())
+					det.put("gorda", "" + (rawExcel.get(23)));
 			}
 			detalles.add(det);
 			return;
@@ -838,9 +864,9 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 			}
 
 			if (rawExcel.get(0).toString().equals("Tipo_Operacion")) {
-				if (rawExcel.get(1).toString().toUpperCase().equals("VENTA"))
+				if (rawExcel.get(1).toString().toUpperCase().equals("VENTA")||rawExcel.get(1).toString().toUpperCase().equals("VENTAS"))
 					caratula.put("Tipo_Operacion", "VENTA");
-				else if (rawExcel.get(1).toString().toUpperCase().equals("COMPRA"))
+				else if (rawExcel.get(1).toString().toUpperCase().equals("COMPRA")||rawExcel.get(1).toString().toUpperCase().equals("COMPRAS"))
 					caratula.put("Tipo_Operacion", "COMPRA");
 				else
 					throw new Exception("Tipo operacion solo puede ser [VENTA] o [COMPRA]");
@@ -947,6 +973,13 @@ private String getValue2(XSSFCell xssfCell) throws Exception {
 			throw new Exception("ERROR procesando RESUMEN " + rawExcel + " :" + e.getMessage());
 		}
 		
+	}
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
 	}
 
 }

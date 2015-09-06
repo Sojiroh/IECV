@@ -23,10 +23,11 @@ public class start {
 		new SetLocationApp();
 		
                 //dirDTE = Paths.get(System.getProperty("user.home"), "Downloads","libros");
-		dirDTE = Paths.get("D:\\Descargas\\jc2");
+		dirDTE = Paths.get("D:\\Descargas\\libros 2");
                 directory = Files.newDirectoryStream(dirDTE);
                 for (Path filePath : directory) {
 		File file = new File(filePath.toString());
+		System.out.println(filePath.toString());
 		String txt = "";
 		try {
                         TransformerIECV iecv = new TransformerIECV();
